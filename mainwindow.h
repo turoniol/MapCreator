@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QApplication>
+#include <QSettings>
 #include "scene.h"
 #include "blockeditor.h"
 #include <QGraphicsView>
@@ -22,6 +23,7 @@ public:
   void addScene(const int w, const int h);
   void addEditBlockView(const int w, const int h);
   void setTextEditGeometry();
+  void failed(QString message);
 private:
   QString fileName;
   int _width, _height;
@@ -31,13 +33,12 @@ private:
   Scene scene;
   BlockEditor blockArea;
 
-  // QWidget interface
-  void loadingFailded();
 protected:
   void resizeEvent(QResizeEvent *event);
 
 private slots:
   void on_loadButton_clicked();
   void on_saveButton_clicked();
+  void on_saveEdit_textChanged();
 };
 #endif // MAINWINDOW_H

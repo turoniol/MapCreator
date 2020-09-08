@@ -17,6 +17,7 @@ private:
 public:
   Map();
   bool loadMapFromFile(const QString &file_name,  unsigned displayedWidth);
+  void createEmptyMap(int x, int y, unsigned displayedWidth);
   void saveMap(QString &file_name);
   unsigned getWidth() const;
   unsigned getHeight() const;

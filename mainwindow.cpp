@@ -26,11 +26,15 @@ MainWindow::MainWindow(QWidget *parent)
   addEditBlockView(_width, _height); // edit block
   setTextEditGeometry();
 
+  if(!QDir("maps").exists())
+    QDir().mkdir("maps");
   addScene(0.8*_width, _height);
   fileName = "map1";
   QString defaulPath = QDir::currentPath() + "/maps/" + fileName + ".txt";
 
-  scene.createMap(0.8*_width, defaulPath);
+  if(!scene.createMap(0.8*_width, defaulPath)) // load default map
+      failed("\"maps\" directory is empty");
+
   scene.setBlocke(&blockArea, ui->graphicsView);
   ui->saveEdit->setText(fileName);
 }
@@ -96,9 +100,9 @@ void MainWindow::resizeEvent(QResizeEvent *event)
   blockArea.setPix();
 }
 
-void MainWindow::loadingFailded() {
+void MainWindow::failed(QString message) {
   QMessageBox *msg = new QMessageBox(this); // message box
-  msg->setText("File doesn't exist");
+  msg->setText(message);
   msg->setStandardButtons(QMessageBox::Ok);
   msg->show();
 }
@@ -111,17 +115,41 @@ MainWindow::~MainWindow()
 void MainWindow::on_loadButton_clicked()
 {
   QString name = ui->saveEdit->toPlainText();
-  QString path = QDir::currentPath() + "/maps/" + name + ".txt";
 
-  if(!scene.createMap(0.8*_width, path)) {
-      loadingFailded();
+
+  if(name[0] != "_") {
+      QString path = QDir::currentPath() + "/maps/" + name + ".txt";
+      if(!scene.createMap(_width, path)) {
+          failed("File with this name doesn`t exist!");
+        }
     }
+  else {
+      auto arr = name.split('_', Qt::SkipEmptyParts);
+      int x = arr[0].toInt();
+      int y = arr[1].toInt();
+      if(x > 0 && y > 0)
+        scene.createEmptyMap(x, y, _width);
+  }
 }
 
 void MainWindow::on_saveButton_clicked()
 {
   QString name = ui->saveEdit->toPlainText();
-  QString path = QDir::currentPath() + "/maps/" + name + ".txt";
 
-  scene.saveMap(path);
+  if(name[0] != "_") {
+      QString path = QDir::currentPath() + "/maps/" + name + ".txt";
+      scene.saveMap(path);
+  }
+  else {
+      failed("Invalid filename! Try to write \"_widthNumber_heightNumber\".");
+  }
+}
+
+void MainWindow::on_saveEdit_textChanged()
+{
+  QString str = ui->saveEdit->toPlainText();
+  if(str[0] == "_")
+    ui->loadButton->setText("New map");
+  else
+    ui->loadButton->setText("Load map");
 }

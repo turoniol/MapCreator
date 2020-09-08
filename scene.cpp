@@ -25,6 +25,25 @@ bool Scene::createMap(const int width, QString &name)
     return false;
 }
 
+void Scene::createEmptyMap(const int x, const int y, const int width)
+{
+    if(map != nullptr)
+      delete map;
+    previousBlock = nullptr;
+    map = new Map;
+
+    map->createEmptyMap(x, y, width);
+    displayMap();
+    map->setBlocksNeighbours();
+    unsigned h;
+    if(this->height() <= map->getGraphicHeight())
+      h = map->getGraphicHeight();
+    else
+      h = this->height();
+    setSceneRect(0, 0, this->width(), h);
+    calculatePixmapSize(0.8*width);
+}
+
 void Scene::displayMap()
 {
   map->displayMap();

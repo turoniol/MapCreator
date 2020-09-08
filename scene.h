@@ -21,6 +21,7 @@ public:
   Scene();
   int calculatePixmapSize(const int width) const;
   bool createMap(const int width, QString& name);
+  void createEmptyMap(const int x, const int y, const int width);
   void displayMap();
   void saveMap(QString &name);
 

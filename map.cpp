@@ -33,6 +33,25 @@ bool Map::loadMapFromFile(const QString &file_name, unsigned displayedWidth)
 
 }
 
+void Map::createEmptyMap(int x, int y, unsigned displayedWidth)
+{
+  calculatePixmap_size(displayedWidth, x);
+
+  width = x;
+  height = y;
+  graphicWidth = pixmap_size*width;
+  graphicHeight = pixmap_size*height;
+
+  for(unsigned y = 0; y < height; ++y) { // adding position of blocks
+      for(unsigned x = 0; x < width; ++x) {
+          Block obj;
+          obj.setSize(pixmap_size);
+          obj.setPos(x*pixmap_size, y*pixmap_size);
+          map.push_back(obj);
+        }
+    }
+}
+
 void Map::saveMap(QString &file_name)
 {
   QFile f(file_name);
