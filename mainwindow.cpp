@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/images/grass.png"));
   this->setWindowTitle("Map editor");
-  this->setMinimumWidth(800);
+  this->setMinimumWidth(800); // minimum size
   this->setMinimumHeight(640);
 
   QScreen *screen = QGuiApplication::primaryScreen(); // getting of the size of the user`s display
@@ -23,17 +23,22 @@ MainWindow::MainWindow(QWidget *parent)
   ui->graphicsView->setMouseTracking(true);
   ui->saveButton->setText("Save map");
   ui->loadButton->setText("Load map");
-  addEditBlockView(_width, _height); // edit block
-  setTextEditGeometry();
+  addEditBlockView(_width, _height); // edit block adding
+  setTextEditGeometry(); // text edit geometry
 
-  if(!QDir("maps").exists())
+  if(!QDir("maps").exists()) // checking maps dir
     QDir().mkdir("maps");
+
+  // adding items in combo box
   addScene(0.8*_width, _height);
-  fileName = "map1";
+  if(renewComboBox())
+    fileName = ui->comboBox->currentText();
+  else
+    fileName = "map";
   QString defaulPath = QDir::currentPath() + "/maps/" + fileName + ".txt";
 
   if(!scene.createMap(0.8*_width, defaulPath)) // load default map
-      failed("\"maps\" directory is empty");
+      showWarning("File with this name doesn`t exist!");
 
   scene.setBlocke(&blockArea, ui->graphicsView);
   ui->saveEdit->setText(fileName);
@@ -84,6 +89,22 @@ void MainWindow::setEditBlockGeometry(unsigned width, unsigned height, unsigned 
   editBlockScene.setSceneRect(0, 0, w, w);
 }
 
+bool MainWindow::renewComboBox()
+{
+  QDir directory(QDir::currentPath() + "/maps");
+  QStringList list = directory.entryList();
+  if(list.length() == 0) {
+      showWarning("Directory is empty.");
+      return false;
+    }
+  for(auto obj : list) {
+      if(obj.contains(".txt")) {
+          ui->comboBox->addItem(obj.remove(".txt"));
+        }
+    }
+  return true;
+}
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
   (void)event;
@@ -100,8 +121,11 @@ void MainWindow::resizeEvent(QResizeEvent *event)
   blockArea.setPix();
 }
 
-void MainWindow::failed(QString message) {
+void MainWindow::showWarning(QString message) { // display a window wight warning
   QMessageBox *msg = new QMessageBox(this); // message box
+  msg->setGeometry(_width/2 - 100, _height/2 - 75/2, 200, 75);
+  msg->setWindowIcon(QIcon(":/images/build1.png"));
+  msg->setStyleSheet("font-size: 20px");
   msg->setText(message);
   msg->setStandardButtons(QMessageBox::Ok);
   msg->show();
@@ -116,19 +140,25 @@ void MainWindow::on_loadButton_clicked()
 {
   QString name = ui->saveEdit->toPlainText();
 
-
   if(name[0] != "_") {
       QString path = QDir::currentPath() + "/maps/" + name + ".txt";
       if(!scene.createMap(_width, path)) {
-          failed("File with this name doesn`t exist!");
+          showWarning("File with this name doesn`t exist!");
         }
     }
   else {
-      auto arr = name.split('_', Qt::SkipEmptyParts);
-      int x = arr[0].toInt();
-      int y = arr[1].toInt();
-      if(x > 0 && y > 0)
-        scene.createEmptyMap(x, y, _width);
+      QStringList arr = name.split('_', Qt::SkipEmptyParts);
+
+      if(arr.length() == 2) {
+          int x = arr[0].toInt();
+          int y = arr[1].toInt();
+          if(x > 0 && y > 0)
+            scene.createEmptyMap(x, y, _width);
+          else
+            showWarning("Invalid syntax");
+        }
+      else
+        showWarning("Invalid syntax");
   }
 }
 
@@ -139,9 +169,10 @@ void MainWindow::on_saveButton_clicked()
   if(name[0] != "_") {
       QString path = QDir::currentPath() + "/maps/" + name + ".txt";
       scene.saveMap(path);
+      renewComboBox();
   }
   else {
-      failed("Invalid filename! Try to write \"_widthNumber_heightNumber\".");
+      showWarning("Invalid filename! Try to write \"_widthNumber_heightNumber\".");
   }
 }
 
@@ -152,4 +183,10 @@ void MainWindow::on_saveEdit_textChanged()
     ui->loadButton->setText("New map");
   else
     ui->loadButton->setText("Load map");
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    (void)index;
+    ui->saveEdit->setText(ui->comboBox->currentText());
 }

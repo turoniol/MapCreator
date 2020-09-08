@@ -5,7 +5,7 @@
 bool Scene::createMap(const int width, QString &name)
 {
   if(map != nullptr)
-    delete map;
+      delete map;
   previousBlock = nullptr;
   map = new Map;
 

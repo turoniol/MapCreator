@@ -23,11 +23,12 @@ public:
   void addScene(const int w, const int h);
   void addEditBlockView(const int w, const int h);
   void setTextEditGeometry();
-  void failed(QString message);
+  void setEditBlockGeometry(unsigned width, unsigned height, unsigned a);
+  bool renewComboBox();
+  void showWarning(QString message);
 private:
   QString fileName;
   int _width, _height;
-  void setEditBlockGeometry(unsigned width, unsigned height, unsigned a);
   QGraphicsScene editBlockScene;
   Ui::MainWindow *ui;
   Scene scene;
@@ -40,5 +41,6 @@ private slots:
   void on_loadButton_clicked();
   void on_saveButton_clicked();
   void on_saveEdit_textChanged();
+  void on_comboBox_currentIndexChanged(int index);
 };
 #endif // MAINWINDOW_H
