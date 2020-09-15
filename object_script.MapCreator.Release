@@ -1,0 +1,10 @@
+release/block.o
+release/blockeditor.o
+release/loadsettings.o
+release/main.o
+release/mainwindow.o
+release/map.o
+release/scene.o
+release/qrc_images.o
+release/moc_mainwindow.o
+release/moc_scene.o

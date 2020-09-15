@@ -4,6 +4,7 @@
 
 bool Scene::createMap(const int width, QString &name)
 {
+  this->width = width;
   if(map != nullptr)
       delete map;
   previousBlock = nullptr;
@@ -17,7 +18,7 @@ bool Scene::createMap(const int width, QString &name)
         y = map->getGraphicHeight();
       else
         y = this->height();
-      setSceneRect(0, 0, this->width(), y);
+      setSceneRect(0, 0, width, y);
       calculatePixmapSize(0.8*width);
       return true;
     }
@@ -25,7 +26,7 @@ bool Scene::createMap(const int width, QString &name)
     return false;
 }
 
-void Scene::createEmptyMap(const int x, const int y, const int width)
+void Scene::createEmptyMap(const int x, const int y)
 {
     if(map != nullptr)
       delete map;
@@ -40,7 +41,7 @@ void Scene::createEmptyMap(const int x, const int y, const int width)
       h = map->getGraphicHeight();
     else
       h = this->height();
-    setSceneRect(0, 0, this->width(), h);
+    setSceneRect(0, 0, width, h);
     calculatePixmapSize(0.8*width);
 }
 

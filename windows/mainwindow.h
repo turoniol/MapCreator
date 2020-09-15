@@ -4,9 +4,11 @@
 #include <QMainWindow>
 #include <QApplication>
 #include <QSettings>
-#include "scene.h"
-#include "blockeditor.h"
 #include <QGraphicsView>
+#include "scene/scene.h"
+#include "block/blockeditor.h"
+#include "warningmessage.h"
+#include "mapcreatingwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,8 +27,13 @@ public:
   void setTextEditGeometry();
   void setEditBlockGeometry(unsigned width, unsigned height, unsigned a);
   bool renewComboBox();
-  void showWarning(QString message);
+
+protected:
+  void resizeEvent(QResizeEvent *event);
+
 private:
+  MapCreatingWindow *creatingWindow;
+  WarningMessage warningWindow;
   QString fileName;
   int _width, _height;
   QGraphicsScene editBlockScene;
@@ -34,13 +41,11 @@ private:
   Scene scene;
   BlockEditor blockArea;
 
-protected:
-  void resizeEvent(QResizeEvent *event);
-
 private slots:
-  void on_loadButton_clicked();
-  void on_saveButton_clicked();
-  void on_saveEdit_textChanged();
   void on_comboBox_currentIndexChanged(int index);
+  void on_actionNew_fmap_triggered();
+  void on_actionOpen_map_triggered();
+  void on_actionSave_map_triggered();
+  void on_actionQuit_triggered();
 };
 #endif // MAINWINDOW_H

@@ -1,6 +1,6 @@
 #ifndef BLOCKEDITOR_H
 #define BLOCKEDITOR_H
-#include <block.h>
+#include "block.h"
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 

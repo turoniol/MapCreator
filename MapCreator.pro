@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++14
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -16,19 +16,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    block.cpp \
-    blockeditor.cpp \
+    block/block.cpp \
+    block/blockeditor.cpp \
     main.cpp \
-    mainwindow.cpp \
-    map.cpp \
-    scene.cpp
+    windows/mainwindow.cpp \
+    map/map.cpp \
+    windows/mapcreatingwindow.cpp \
+    scene/scene.cpp \
+    windows/warningmessage.cpp
 
 HEADERS += \
-    block.h \
-    blockeditor.h \
-    mainwindow.h \
-    map.h \
-    scene.h
+    block/block.h \
+    block/blockeditor.h \
+    windows/mainwindow.h \
+    map/map.h \
+    windows/mapcreatingwindow.h \
+    scene/scene.h \
+    windows/warningmessage.h
 
 FORMS += \
     mainwindow.ui

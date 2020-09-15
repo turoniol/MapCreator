@@ -6,8 +6,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QWidget>
 #include <QPainter>
-#include "map.h"
-#include "blockeditor.h"
+#include "map/map.h"
+#include "block/blockeditor.h"
 
 class Scene : public QGraphicsScene
 {
@@ -17,18 +17,17 @@ private:
   Block *previousBlock;
   BlockEditor *blocke;
   QWidget *parent;
+  int width;
 public:
   Scene();
   int calculatePixmapSize(const int width) const;
   bool createMap(const int width, QString& name);
-  void createEmptyMap(const int x, const int y, const int width);
   void displayMap();
   void saveMap(QString &name);
-
-  ~Scene();
-
   // QGraphicsScene interface
   void setBlocke(BlockEditor *value, QWidget *parent);
+  void createEmptyMap(const int x, const int y);
+  ~Scene();
 protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

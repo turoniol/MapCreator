@@ -54,19 +54,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="saveButton">
-    <property name="geometry">
-     <rect>
-      <x>710</x>
-      <y>140</y>
-      <width>80</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="saveEdit">
     <property name="geometry">
      <rect>
@@ -75,19 +62,6 @@
       <width>104</width>
       <height>85</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="loadButton">
-    <property name="geometry">
-     <rect>
-      <x>710</x>
-      <y>180</y>
-      <width>80</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
     </property>
    </widget>
    <widget class="QComboBox" name="comboBox">
@@ -110,7 +84,47 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew_fmap"/>
+    <addaction name="actionOpen_map"/>
+    <addaction name="actionSave_map"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
+  <action name="actionNew_fmap">
+   <property name="text">
+    <string>New map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpen_map">
+   <property name="text">
+    <string>Open map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave_map">
+   <property name="text">
+    <string>Save map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

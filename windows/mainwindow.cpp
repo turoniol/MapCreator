@@ -1,10 +1,12 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QDebug>
 #include <QScreen>
 #include <QGuiApplication>
 #include <QMessageBox>
-#include "map.h"
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "map/map.h"
+
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
   , ui(new Ui::MainWindow)
