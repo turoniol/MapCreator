@@ -19,7 +19,7 @@ bool Scene::createMap(const int width, QString &name)
       else
         y = this->height();
       setSceneRect(0, 0, width, y);
-      calculatePixmapSize(0.8*width);
+      calculatePixmapSize(width);
       return true;
     }
   else
@@ -83,8 +83,8 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
           block->setPix();
         }
       else if(event->button() == Qt::RightButton) {
-          // TODO
-          // automatic block
+          if (blocke->getType() != Block::GRASS)
+              blocke->rotate();
         }
     }
 }
@@ -93,6 +93,12 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
   (void)event;
   parent->setMouseTracking(true);
+}
+
+void Scene::keyPressEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Space)
+    blocke->retype();
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

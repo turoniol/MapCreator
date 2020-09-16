@@ -28,51 +28,16 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <widget class="QGraphicsView" name="graphicsView">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>256</width>
-      <height>192</height>
+      <width>160</width>
+      <height>80</height>
      </rect>
     </property>
-    <property name="cursor" stdset="0">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-   </widget>
-   <widget class="QGraphicsView" name="editBlockView">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>300</y>
-      <width>256</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="saveEdit">
-    <property name="geometry">
-     <rect>
-      <x>700</x>
-      <y>0</y>
-      <width>104</width>
-      <height>85</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>674</x>
-      <y>230</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

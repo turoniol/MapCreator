@@ -8,11 +8,8 @@ class BlockEditor : public Block
 {
 public:
   BlockEditor();
-  void setPix();
   void retype();
   void rotate();
-protected:
-  void mousePressEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // BLOCKEDITOR_H

@@ -6,6 +6,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QWidget>
 #include <QPainter>
+#include <QKeyEvent>
+
 #include "map/map.h"
 #include "block/blockeditor.h"
 
@@ -31,10 +33,8 @@ public:
 protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
-  // QGraphicsScene interface
-protected:
   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+  virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // SCENE_H
