@@ -10,7 +10,7 @@ bool Scene::createMap(const int width, QString &name)
   previousBlock = nullptr;
   map = new Map;
 
-  if(map->loadMapFromFile(name)) {
+  if(map->loadMapFromFile(name, width)) {
       displayMap();
       map->setBlocksNeighbours();
       unsigned y;
@@ -19,7 +19,7 @@ bool Scene::createMap(const int width, QString &name)
       else
         y = this->height();
       setSceneRect(0, 0, width, y);
-      calculatePixmapSize(0.8*width);
+      calculatePixmapSize(width);
       return true;
     }
   else
@@ -33,7 +33,7 @@ void Scene::createEmptyMap(const int x, const int y)
     previousBlock = nullptr;
     map = new Map;
 
-    map->createEmptyMap(x, y);
+    map->createEmptyMap(x, y, width);
     displayMap();
     map->setBlocksNeighbours();
     unsigned h;
@@ -83,8 +83,8 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
           block->setPix();
         }
       else if(event->button() == Qt::RightButton) {
-          // TODO
-          // automatic block
+          if (blocke->getType() != Block::GRASS)
+              blocke->rotate();
         }
     }
 }
@@ -93,6 +93,12 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
   (void)event;
   parent->setMouseTracking(true);
+}
+
+void Scene::keyPressEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Space)
+    blocke->retype();
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
