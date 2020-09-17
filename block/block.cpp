@@ -21,9 +21,9 @@ void Block::setChange(bool value)
   change = value;
 }
 
-void Block::setSize(int value)
+unsigned Block::getPixmapSize()
 {
-  size = value;
+  return 60;
 }
 
 Block::BlockType Block::getType() const
@@ -35,7 +35,8 @@ QPixmap Block::getPixmap()
 {
   QPixmap pix;
   fillTypeMap();
-  this->setTransformOriginPoint(size/2, size/2);
+  int SIZE = getPixmapSize();
+  this->setTransformOriginPoint(SIZE/2, SIZE/2);
 
   if(type == GRASS)
     pix.load(":/images/grass.png");
@@ -62,7 +63,6 @@ void Block::setHighlight(BlockType type, int rot)
     pix.load(":/images/road_centralEdit.png");
   setRotation(rot);
 
-  pix = pix.scaled(this->size, this->size, Qt::IgnoreAspectRatio);
   setPixmap(pix);
 }
 
@@ -99,7 +99,6 @@ void Block::setType(const unsigned &value)
 void Block::setPix()
 {
   pixmap = getPixmap();
-  pixmap = pixmap.scaled(this->size, this->size, Qt::IgnoreAspectRatio);
   rotation = typeMap[type];
   setRotation(rotation);
 
@@ -111,13 +110,11 @@ Block::Block()
 {
   change = false;
   type = GRASS;
-  size = 60;
 }
 
 Block::Block(const Block &obj) : QGraphicsPixmapItem()
 {
   this->type = obj.type;
-  this->size = obj.size;
   this->setPos(obj.pos());
 }
 
@@ -125,7 +122,6 @@ Block Block::operator=(const Block &obj)
 {
   Block block;
   block.type = obj.type;
-  block.size = obj.size;
   block.setPos(obj.pos());
   return block;
 }

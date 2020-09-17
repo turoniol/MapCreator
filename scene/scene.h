@@ -14,16 +14,9 @@
 class Scene : public QGraphicsScene
 {
   Q_OBJECT
-private:
-  Map *map;
-  Block *previousBlock;
-  BlockEditor *blocke;
-  QWidget *parent;
-  int width;
 public:
   Scene();
-  int calculatePixmapSize(const int width) const;
-  bool createMap(const int width, QString& name);
+  bool createMap(const int w, const int h, QString& name);
   void displayMap();
   void saveMap(QString &name);
   // QGraphicsScene interface
@@ -35,6 +28,12 @@ protected:
   virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
   virtual void keyPressEvent(QKeyEvent *event) override;
+private:
+  Map *map;
+  Block *previousBlock;
+  BlockEditor *blocke;
+  QWidget *parent;
+  int width, height;
 };
 
 #endif // SCENE_H

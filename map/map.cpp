@@ -1,13 +1,13 @@
 #include "map.h"
 #include <QDebug>
-bool Map::loadMapFromFile(const QString &file_name, unsigned displayedWidth)
+bool Map::loadMapFromFile(const QString &file_name)
 {
   QFile file(file_name);
   if(file.open(QIODevice::Text | QIODevice::ReadOnly)) {
       QTextStream out(&file);
       out >> width >> height; // reading of size
 
-      calculatePixmap_size(displayedWidth, width);
+      int pixmap_size = Block::getPixmapSize();
 
       graphicWidth = pixmap_size*width;
       graphicHeight = pixmap_size*height;
@@ -19,7 +19,6 @@ bool Map::loadMapFromFile(const QString &file_name, unsigned displayedWidth)
 
               out >> type;
               obj.setType(type);
-              obj.setSize(pixmap_size);
 
               obj.setPos(x*pixmap_size, y*pixmap_size);
               map.push_back(obj);
@@ -33,9 +32,9 @@ bool Map::loadMapFromFile(const QString &file_name, unsigned displayedWidth)
 
 }
 
-void Map::createEmptyMap(int x, int y, unsigned displayedWidth)
+void Map::createEmptyMap(int x, int y)
 {
-  calculatePixmap_size(displayedWidth, x);
+  int pixmap_size = Block::getPixmapSize();
 
   width = x;
   height = y;
@@ -45,7 +44,6 @@ void Map::createEmptyMap(int x, int y, unsigned displayedWidth)
   for(unsigned y = 0; y < height; ++y) { // adding position of blocks
       for(unsigned x = 0; x < width; ++x) {
           Block obj;
-          obj.setSize(pixmap_size);
           obj.setPos(x*pixmap_size, y*pixmap_size);
           map.push_back(obj);
         }
@@ -80,6 +78,7 @@ QVector<Block> &Map::getMapVector()
 
 Block &Map::getBlockByCoordinate(qreal x, qreal y)
 {
+  int pixmap_size = Block::getPixmapSize();
   unsigned _x = (unsigned)x,
       _y = (unsigned)y,
       modX = _x % pixmap_size,
@@ -92,35 +91,31 @@ Block &Map::getBlockByCoordinate(qreal x, qreal y)
   return map[_x + _y*width];
 }
 
-void Map::calculatePixmap_size(unsigned displayedWidth, unsigned mapWidth)
-{
-  pixmap_size = displayedWidth/mapWidth;
-}
 
 void Map::setBlocksNeighbours()
 {
   Block* ptr = nullptr;
-  int size = (int)pixmap_size;
+  int pixmap_size = Block::getPixmapSize();
   for(auto &obj : map) {
       int x = obj.x();
       int y = obj.y();
 
-      if(y - size >= 0)
+      if(y - pixmap_size >= 0)
           obj.addNeighbour(getBlockByCoordinate(x, y - pixmap_size)); // top
       else
         obj.addNeighbour(*ptr);
 
-      if(x - size >= 0)
+      if(x - pixmap_size >= 0)
         obj.addNeighbour(getBlockByCoordinate(x - pixmap_size, y)); // left
       else
         obj.addNeighbour(*ptr);
 
-      if(y + size < (int)graphicHeight)
+      if(y + pixmap_size < (int)graphicHeight)
         obj.addNeighbour(getBlockByCoordinate(x, y + pixmap_size)); // down
       else
         obj.addNeighbour(*ptr);
 
-      if(x + size < (int)graphicWidth)
+      if(x + pixmap_size < (int)graphicWidth)
         obj.addNeighbour(getBlockByCoordinate(x + pixmap_size, y)); // right
       else
         obj.addNeighbour(*ptr);

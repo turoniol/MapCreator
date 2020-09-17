@@ -2,24 +2,25 @@
 #include <QDebug>
 #include <QPicture>
 
-bool Scene::createMap(const int width, QString &name)
+bool Scene::createMap(const int w, const int h, QString &name)
 {
-  this->width = width;
+  width = w;
+  height = h;
   if(map != nullptr)
       delete map;
   previousBlock = nullptr;
   map = new Map;
 
-  if(map->loadMapFromFile(name, width)) {
+  if(map->loadMapFromFile(name)) {
       displayMap();
       map->setBlocksNeighbours();
-      unsigned y;
-      if(this->height() <= map->getGraphicHeight())
-        y = map->getGraphicHeight();
-      else
-        y = this->height();
-      setSceneRect(0, 0, width, y);
-      calculatePixmapSize(width);
+      unsigned y = map->getGraphicHeight(),
+          x = map->getGraphicWidth();
+      if (w > (int) x)
+        x = w;
+      if (h > (int) y)
+        y = h;
+      setSceneRect(0, 0, x, y);
       return true;
     }
   else
@@ -33,16 +34,16 @@ void Scene::createEmptyMap(const int x, const int y)
     previousBlock = nullptr;
     map = new Map;
 
-    map->createEmptyMap(x, y, width);
+    map->createEmptyMap(x, y);
     displayMap();
     map->setBlocksNeighbours();
-    unsigned h;
-    if(this->height() <= map->getGraphicHeight())
-      h = map->getGraphicHeight();
-    else
-      h = this->height();
-    setSceneRect(0, 0, width, h);
-    calculatePixmapSize(0.8*width);
+    unsigned h = map->getGraphicHeight(),
+        w = map->getGraphicWidth();
+    if (width > (int) w)
+      w = width;
+    if (height > (int) h)
+      h = height;
+    setSceneRect(0, 0, w, h);
 }
 
 void Scene::displayMap()
@@ -58,10 +59,6 @@ void Scene::saveMap(QString& name)
   map->saveMap(name);
 }
 
-int Scene::calculatePixmapSize(const int width) const// calculates size of the pixmap of a block
-{
-  return width/map->getWidth();
-}
 
 Scene::~Scene() {
   delete map;
@@ -83,8 +80,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
           block->setPix();
         }
       else if(event->button() == Qt::RightButton) {
-          if (blocke->getType() != Block::GRASS)
-              blocke->rotate();
+          blocke->rotate();
         }
     }
 }

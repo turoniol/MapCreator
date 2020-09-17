@@ -22,13 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
   QScreen *screen = QGuiApplication::primaryScreen();
   QRect rec = screen->geometry();
   _width = rec.width();
-  _height = rec.height();
+  _height = rec.height() - ui->graphicsView->height();
 
-  ui->verticalLayout->setGeometry(QRect(0,0, _width, _height));
-  graphicsView = new GraphicsView(this);
-  graphicsView->setMouseTracking(true);
-  graphicsView->setGeometry(0, 0, _width, _height);
-  ui->verticalLayout->addWidget(graphicsView);
+  ui->graphicsView->setMouseTracking(true);
+  ui->graphicsView->setGeometry(0, 0, _width, _height);
 
   creatingWindow = new MapCreatingWindow(this, &scene);
 
@@ -36,29 +33,30 @@ MainWindow::MainWindow(QWidget *parent)
   if(!QDir("maps").exists())
     QDir().mkdir("maps");
 
-  // adding items in combo box
-  addScene(_width, _height);
+  // adding of scene
+  addScene();
 
   fileName = "map";
   QString defaulPath = QDir::currentPath() + "/maps/" + fileName + ".txt";
   // map creating
-  if(!scene.createMap(_width, defaulPath))
+  if(!scene.createMap(_width, _height, defaulPath))
     creatingWindow->show();
 
 
-  scene.setBlocke(&blockArea, graphicsView);
+  scene.setBlocke(&blockArea, ui->graphicsView);
 }
 
-void MainWindow::addScene(const int w, const int h) {
-  scene.setSceneRect(0, 0, w, h);
-  graphicsView->setScene(&scene);
+void MainWindow::addScene() {
+  ui->graphicsView->setScene(&scene);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
   (void)event;
-  int _width = this->width();
-  int _height = this->height();
+  int w = this->width();
+  int h = this->height() - ui->menubar->height();
+
+  ui->graphicsView->setGeometry(0, 0, w, h);
 }
 
 MainWindow::~MainWindow()

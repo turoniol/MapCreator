@@ -9,7 +9,6 @@ public:
                    DOWN_LEFT = DOWN + LEFT, DOWN_RIGHT = DOWN + RIGHT,
                    UP_RIGHT = UP + RIGHT, UP_LEFT = UP + LEFT};
   Block();
-  void setSize(int value);
   Block(const Block &obj);
   Block operator=(const Block &obj);
   void setPix();
@@ -23,12 +22,12 @@ public:
   void fillTypeMap();
   bool isChanged();
   void setChange(bool value);
+  static unsigned getPixmapSize();
 protected:
   QMap<BlockType, int> typeMap;
   QVector<Block*> neighbours;
   BlockType type;
   bool change;
-  int size;
   int rotation;
   QPixmap pixmap;
 };

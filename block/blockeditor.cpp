@@ -4,7 +4,6 @@
 BlockEditor::BlockEditor()
 {
   rotation = 0;
-  size = 60;
   type = GRASS;
 }
 void BlockEditor::rotate()

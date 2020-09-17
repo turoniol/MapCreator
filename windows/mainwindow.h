@@ -4,12 +4,12 @@
 #include <QMainWindow>
 #include <QApplication>
 #include <QSettings>
+#include <QScrollBar>
 
 #include "scene/scene.h"
 #include "block/blockeditor.h"
 #include "warningmessage.h"
 #include "mapcreatingwindow.h"
-#include "scene/graphicsview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,13 +23,12 @@ public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
-  void addScene(const int w, const int h);
+  void addScene();
 
 protected:
-  void resizeEvent(QResizeEvent *event);
+  virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
-  GraphicsView *graphicsView;
   MapCreatingWindow *creatingWindow;
   WarningMessage warningWindow;
   QString fileName;
@@ -44,5 +43,8 @@ private slots:
   void on_actionOpen_map_triggered();
   void on_actionSave_map_triggered();
   void on_actionQuit_triggered();
+
+  // QWidget interface
+
 };
 #endif // MAINWINDOW_H
