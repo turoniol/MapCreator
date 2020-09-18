@@ -20,8 +20,11 @@ bool Scene::createMap(const int w, const int h, QString &name)
       setSceneRect(0, 0, x, y);
       return true;
     }
-  else
-    return false;
+  else {
+      delete map;
+      map = nullptr;
+      return false;
+    }
 }
 
 void Scene::createEmptyMap(const int x, const int y)
@@ -40,6 +43,14 @@ void Scene::createEmptyMap(const int x, const int y)
     setSceneRect(0, 0, w, h);
 }
 
+bool Scene::existMap()
+{
+  if (map == nullptr)
+    return false;
+  else
+    return true;
+}
+
 void Scene::displayMap()
 {
   map->displayMap();
@@ -48,9 +59,10 @@ void Scene::displayMap()
     }
 }
 
-void Scene::saveMap(QString& name)
+void Scene::saveMap(const QString& name)
 {
-  map->saveMap(name);
+  if(existMap())
+    map->saveMap(name);
 }
 
 
@@ -92,29 +104,32 @@ void Scene::keyPressEvent(QKeyEvent *event)
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  int x = event->scenePos().x();
-  int y = event->scenePos().y();
+  int x = 0, y = 0;
+  if (existMap()) {
+      x = event->scenePos().x();
+      y = event->scenePos().y();
 
-  if(x < (int)map->getGraphicWidth() && y < (int)map->getGraphicHeight() &&
-     x >= 0 && y >= 0) {
-      Block *block = &map->getBlockByCoordinate(x, y);
+      if(x < (int)map->getGraphicWidth() && y < (int)map->getGraphicHeight() &&
+         x >= 0 && y >= 0) {
+          Block *block = &map->getBlockByCoordinate(x, y);
 
-      block->setHighlight(blocke->getType(), blocke->getRotation());
+          block->setHighlight(blocke->getType(), blocke->getRotation());
 
-      if(!parent->hasMouseTracking() && !block->isChanged()) {
-          block->setType(blocke->getType());
-          block->setPix();
+          if(!parent->hasMouseTracking() && !block->isChanged()) {
+              block->setType(blocke->getType());
+              block->setPix();
+            }
+
+          if(previousBlock == nullptr) {
+              previousBlock = block;
+            }
+          else if(block->pos() != previousBlock->pos()) {
+              previousBlock->setPix();
+              previousBlock->setChange(false);
+              previousBlock = block;
+            }
+
         }
-
-      if(previousBlock == nullptr) {
-          previousBlock = block;
-      }
-      else if(block->pos() != previousBlock->pos()) {
-          previousBlock->setPix();
-          previousBlock->setChange(false);
-          previousBlock = block;
-        }
-
     }
 }
 

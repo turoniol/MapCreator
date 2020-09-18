@@ -18,10 +18,11 @@ public:
   Scene();
   bool createMap(const int w, const int h, QString& name);
   void displayMap();
-  void saveMap(QString &name);
+  void saveMap(const QString &name);
   // QGraphicsScene interface
   void setBlocke(BlockEditor *value, QWidget *parent);
   void createEmptyMap(const int x, const int y);
+  bool existMap();
   ~Scene();
 protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

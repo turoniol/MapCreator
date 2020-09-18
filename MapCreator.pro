@@ -24,6 +24,7 @@ SOURCES += \
     map/map.cpp \
     windows/mapcreatingwindow.cpp \
     scene/scene.cpp \
+    windows/mapsavingwindow.cpp \
     windows/warningmessage.cpp
 
 HEADERS += \
@@ -34,6 +35,7 @@ HEADERS += \
     map/map.h \
     windows/mapcreatingwindow.h \
     scene/scene.h \
+    windows/mapsavingwindow.h \
     windows/warningmessage.h
 
 FORMS += \

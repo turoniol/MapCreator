@@ -10,6 +10,7 @@
 #include "block/blockeditor.h"
 #include "warningmessage.h"
 #include "mapcreatingwindow.h"
+#include "mapsavingwindow.h"
 #include "scene/graphicsviewzoom.h"
 
 QT_BEGIN_NAMESPACE
@@ -30,23 +31,27 @@ protected:
   virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
+  QDir directory;
+  QStringList listOfFileNames;
   GraphicsViewZoom *viewZoom;
   MapCreatingWindow *creatingWindow;
-  WarningMessage warningWindow;
+  MapSavingWindow *savingWindow;
+  WarningMessage *warningWindow;
   QString fileName;
   int _width, _height;
   QGraphicsScene editBlockScene;
   Ui::MainWindow *ui;
   Scene scene;
   BlockEditor blockArea;
-
+signals:
+  void readyToClearWarningWindow();
 private slots:
+  void clearWarningWindowPointer();
   void on_actionNew_fmap_triggered();
   void on_actionOpen_map_triggered();
   void on_actionSave_map_triggered();
   void on_actionQuit_triggered();
-
-  // QWidget interface
+  void saveMap();
 
 };
 #endif // MAINWINDOW_H

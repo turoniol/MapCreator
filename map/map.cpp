@@ -50,7 +50,7 @@ void Map::createEmptyMap(int x, int y)
     }
 }
 
-void Map::saveMap(QString &file_name)
+void Map::saveMap(const QString &file_name)
 {
   QFile f(file_name);
   if(f.open(QIODevice::WriteOnly)) {
@@ -141,6 +141,8 @@ unsigned Map::getGraphicHeight() const
 
 Map::Map()
 {
+  graphicWidth = 0;
+  graphicHeight = 0;
   width = 0;
   height = 0;
 }

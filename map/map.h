@@ -17,7 +17,7 @@ public:
   Map();
   bool loadMapFromFile(const QString &file_name);
   void createEmptyMap(int x, int y);
-  void saveMap(QString &file_name);
+  void saveMap(const QString &file_name);
   unsigned getWidth() const;
   unsigned getHeight() const;
   QVector<Block> &getMapVector();
