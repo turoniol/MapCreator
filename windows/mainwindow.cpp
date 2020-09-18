@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
   _width = rec.width();
   _height = rec.height() - ui->graphicsView->height();
 
+  viewZoom = new GraphicsViewZoom(ui->graphicsView);
+  viewZoom->set_modifiers(Qt::ControlModifier);
+
   ui->graphicsView->setMouseTracking(true);
   ui->graphicsView->setGeometry(0, 0, _width, _height);
 

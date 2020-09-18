@@ -16,10 +16,7 @@ bool Scene::createMap(const int w, const int h, QString &name)
       map->setBlocksNeighbours();
       unsigned y = map->getGraphicHeight(),
           x = map->getGraphicWidth();
-      if (w > (int) x)
-        x = w;
-      if (h > (int) y)
-        y = h;
+
       setSceneRect(0, 0, x, y);
       return true;
     }
@@ -39,10 +36,7 @@ void Scene::createEmptyMap(const int x, const int y)
     map->setBlocksNeighbours();
     unsigned h = map->getGraphicHeight(),
         w = map->getGraphicWidth();
-    if (width > (int) w)
-      w = width;
-    if (height > (int) h)
-      h = height;
+
     setSceneRect(0, 0, w, h);
 }
 

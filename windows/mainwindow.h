@@ -10,6 +10,7 @@
 #include "block/blockeditor.h"
 #include "warningmessage.h"
 #include "mapcreatingwindow.h"
+#include "scene/graphicsviewzoom.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +30,7 @@ protected:
   virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
+  GraphicsViewZoom *viewZoom;
   MapCreatingWindow *creatingWindow;
   WarningMessage warningWindow;
   QString fileName;

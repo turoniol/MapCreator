@@ -19,6 +19,7 @@ SOURCES += \
     block/block.cpp \
     block/blockeditor.cpp \
     main.cpp \
+    scene/graphicsviewzoom.cpp \
     windows/mainwindow.cpp \
     map/map.cpp \
     windows/mapcreatingwindow.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 HEADERS += \
     block/block.h \
     block/blockeditor.h \
+    scene/graphicsviewzoom.h \
     windows/mainwindow.h \
     map/map.h \
     windows/mapcreatingwindow.h \
