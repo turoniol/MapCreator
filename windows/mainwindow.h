@@ -11,7 +11,9 @@
 #include "warningmessage.h"
 #include "mapcreatingwindow.h"
 #include "mapsavingwindow.h"
+#include "maploadingwindow.h"
 #include "scene/graphicsviewzoom.h"
+#include "common/mydir.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,18 +26,15 @@ class MainWindow : public QMainWindow
 public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
-
-  void addScene();
-
 protected:
   virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
-  QDir directory;
-  QStringList listOfFileNames;
+  MyDir _dir;
   GraphicsViewZoom *viewZoom;
   MapCreatingWindow *creatingWindow;
   MapSavingWindow *savingWindow;
+  MapLoadingWindow *loadingWindow;
   WarningMessage *warningWindow;
   QString fileName;
   int _width, _height;

@@ -1,10 +1,9 @@
 #include "mapcreatingwindow.h"
 #include <QDebug>
 
-MapCreatingWindow::MapCreatingWindow(QWidget *parent, Scene *scene) : QDialog(parent)
+MapCreatingWindow::MapCreatingWindow(QWidget *parent) : QDialog(parent)
 {
   this->parent = parent;
-  this->scene = scene;
   setFixedSize(200, 175);
   // ptr init
   layout = new QVBoxLayout(this);
@@ -15,6 +14,16 @@ MapCreatingWindow::MapCreatingWindow(QWidget *parent, Scene *scene) : QDialog(pa
   addButtons();
   connectSlots();
   setStyle();
+}
+
+int MapCreatingWindow::getX() const
+{
+  return ex->text().toInt();
+}
+
+int MapCreatingWindow::getY() const
+{
+  return ey->text().toInt();
 }
 
 void MapCreatingWindow::addFields()
@@ -55,18 +64,6 @@ void MapCreatingWindow::setStyle()
 void MapCreatingWindow::connectSlots()
 {
   connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-  connect(buttonBox, &QDialogButtonBox::accepted, this, &MapCreatingWindow::acceptClicked);
+  connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 }
-
-void MapCreatingWindow::acceptClicked()
-{
-  int x = ex->text().toInt();
-  int y = ex->text().toInt();
-
-  if (x > 0 && y > 0) {
-      scene->createEmptyMap(x, y);
-      QDialog::accept();
-    }
-}
-
 

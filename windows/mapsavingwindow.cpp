@@ -1,6 +1,6 @@
 #include "mapsavingwindow.h"
 
-MapSavingWindow::MapSavingWindow(QWidget *parent, QString file_name) : QDialog(parent)
+MapSavingWindow::MapSavingWindow(QWidget *parent) : QDialog(parent)
 {
   setFixedSize(200, 150);
   setWindowTitle("Save");
@@ -9,10 +9,7 @@ MapSavingWindow::MapSavingWindow(QWidget *parent, QString file_name) : QDialog(p
   label = new QLabel("Name:");
   button_box = new QDialogButtonBox(QDialogButtonBox::Ok
                                      | QDialogButtonBox::Cancel);
-  if (!file_name.isEmpty())
-    line_edit = new QLineEdit(file_name);
-  else
-    line_edit = new QLineEdit;
+  line_edit = new QLineEdit;
   // style
   line_edit->setGeometry(0, 0, this->width(), 50);
   line_edit->setStyleSheet("font-size: 25px");
@@ -31,6 +28,11 @@ MapSavingWindow::MapSavingWindow(QWidget *parent, QString file_name) : QDialog(p
 QString MapSavingWindow::getText()
 {
   return line_edit->text();
+}
+
+void MapSavingWindow::setText(QString t)
+{
+  line_edit->setText(t);
 }
 
 void MapSavingWindow::checkedAccept()

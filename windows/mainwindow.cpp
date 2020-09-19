@@ -17,9 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
   this->setMinimumWidth(800); // minimum mainwindow size
   this->setMinimumHeight(640);
 
-  creatingWindow = new MapCreatingWindow(this, &scene);
-  savingWindow = new MapSavingWindow(this, fileName);
-
   // getting the size of the user`s display
   QScreen *screen = QGuiApplication::primaryScreen();
   QRect rec = screen->geometry();
@@ -33,33 +30,42 @@ MainWindow::MainWindow(QWidget *parent)
   ui->graphicsView->setMouseTracking(true);
   ui->graphicsView->setGeometry(0, 0, _width, _height);
 
-  creatingWindow = new MapCreatingWindow(this, &scene);
-
   // checking map`s dir
   if(!QDir("maps").exists())
     QDir().mkdir("maps");
 
-  directory.setPath(QDir::currentPath() + "/maps/");
-  // adding of scene
-  addScene();
+  // declaration of load-save-open pointers
+  creatingWindow = new MapCreatingWindow(this);
+  savingWindow = new MapSavingWindow(this);
+  loadingWindow = new MapLoadingWindow(this);
 
-  listOfFileNames = directory.entryList();
-
-  fileName = "map";
-
-  QString defaulPath = directory.path() + '/' + fileName + ".txt";
-  // map creating
-  if(!scene.createMap(_width, _height, defaulPath))
+  // map loading
+  if(_dir.isEmpty())
     creatingWindow->show();
+  else
+    loadingWindow->show();
 
+  // TO DO
+  // rewrite BlockEditor
   scene.setBlocke(&blockArea, ui->graphicsView);
-
-  connect(savingWindow, &QDialog::accepted, this, &MainWindow::saveMap);
-  connect(this, &MainWindow::readyToClearWarningWindow, this, &MainWindow::clearWarningWindowPointer);
-}
-
-void MainWindow::addScene() {
   ui->graphicsView->setScene(&scene);
+
+  connect(this, &MainWindow::readyToClearWarningWindow, this, &MainWindow::clearWarningWindowPointer);
+  // on save map connect
+  connect(savingWindow, &QDialog::accepted, this, &MainWindow::saveMap);
+  // on create map connect
+  connect(creatingWindow, &QDialog::accepted, [this]() {
+      scene.createEmptyMap(creatingWindow->getX(), creatingWindow->getY());
+      fileName.clear();
+      savingWindow->setText(fileName);
+  });
+  // on open map connect
+  connect(loadingWindow, &MapLoadingWindow::choosen, [this]() {
+      fileName = loadingWindow->name();
+      savingWindow->setText(fileName);
+      QString path = _dir.mapsPath() + fileName + ".txt";
+      scene.createMap(_width, _height, path);
+  });
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -77,6 +83,38 @@ void MainWindow::clearWarningWindowPointer()
   warningWindow = nullptr;
 }
 
+void MainWindow::saveMap()
+{
+  warningWindow = new WarningMessage;
+  QString name = savingWindow->getText();
+  QString path = _dir.mapsPath() + name + ".txt";
+  if (_dir.findFile(QString(name + ".txt")) &&
+      (this->fileName != name))
+    {
+      warningWindow->showMessage("Map with this name exist. Rewrite it?");
+      connect(warningWindow, &QMessageBox::rejected, [this](){
+          this->savingWindow->show();
+          emit readyToClearWarningWindow();
+        });
+      connect(warningWindow, &QMessageBox::accepted, [this, path]() {
+          scene.saveMap(path);
+          loadingWindow->renew();
+          emit readyToClearWarningWindow();
+        });
+    }
+  else {
+    scene.saveMap(path);
+    fileName = name;
+    savingWindow->setText(fileName);
+    loadingWindow->renew();
+    emit readyToClearWarningWindow();
+    }
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+  QApplication::quit();
+}
 MainWindow::~MainWindow()
 {
   delete ui;
@@ -89,44 +127,10 @@ void MainWindow::on_actionNew_fmap_triggered()
 
 void MainWindow::on_actionOpen_map_triggered()
 {
-//  QString name = " ";
-
-//  if(!name.isEmpty()) {
-//      QString path = QDir::currentPath() + "/maps/" + name + ".txt";
-//      if(!scene.createMap(_width, path)) {
-//          warningWindow.showMessage("File with this name doesn`t exist!");
-//        }
-//    }
+  loadingWindow->show();
 }
 
 void MainWindow::on_actionSave_map_triggered()
 {
   savingWindow->show();
-}
-
-void MainWindow::saveMap()
-{
-  warningWindow = new WarningMessage;
-  QString name = savingWindow->getText();
-  QString path = directory.path() + "/" + name + ".txt";
-  if (listOfFileNames.contains(QString(name + ".txt")) &&
-      (this->fileName != name))
-    {
-      warningWindow->showMessage("Map with this name exist. Rewrite it?");
-      connect(warningWindow, &QMessageBox::rejected, [this](){
-          this->savingWindow->show();
-          emit this->readyToClearWarningWindow();
-        });
-      connect(warningWindow, &QMessageBox::accepted, [this, path]() {
-          this->scene.saveMap(path);
-          emit this->readyToClearWarningWindow();
-        });
-    }
-  else
-    scene.saveMap(path);
-}
-
-void MainWindow::on_actionQuit_triggered()
-{
-  QApplication::quit();
 }

@@ -76,16 +76,16 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
   qreal x = event->scenePos().x(),
       y = event->scenePos().y();
 
-  if(x < map->getGraphicWidth() && y < map->getGraphicHeight() &&
+  if (existMap() && x < map->getGraphicWidth() && y < map->getGraphicHeight() &&
      x >= 0 && y >= 0) {
       Block *block = &map->getBlockByCoordinate(x, y);
 
-      if(event->button() == Qt::LeftButton) {
+      if (event->button() == Qt::LeftButton) {
           Block::BlockType blockType = blocke->getType();
           block->setType(blockType);
           block->setPix();
         }
-      else if(event->button() == Qt::RightButton) {
+      else if (event->button() == Qt::RightButton) {
           blocke->rotate();
         }
     }

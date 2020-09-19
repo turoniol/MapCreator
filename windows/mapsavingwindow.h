@@ -13,8 +13,9 @@ class MapSavingWindow : public QDialog
 {
   Q_OBJECT
 public:
-  MapSavingWindow(QWidget *parent = nullptr, QString file_name = NULL);
+  MapSavingWindow(QWidget *parent = nullptr);
   QString getText();
+  void setText(QString t);
 private:
   // variables
   QVBoxLayout* layout;

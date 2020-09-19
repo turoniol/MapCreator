@@ -18,23 +18,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     block/block.cpp \
     block/blockeditor.cpp \
+    common/mydir.cpp \
     main.cpp \
     scene/graphicsviewzoom.cpp \
     windows/mainwindow.cpp \
     map/map.cpp \
     windows/mapcreatingwindow.cpp \
     scene/scene.cpp \
+    windows/maploadingwindow.cpp \
     windows/mapsavingwindow.cpp \
     windows/warningmessage.cpp
 
 HEADERS += \
     block/block.h \
     block/blockeditor.h \
+    common/mydir.h \
     scene/graphicsviewzoom.h \
     windows/mainwindow.h \
     map/map.h \
     windows/mapcreatingwindow.h \
     scene/scene.h \
+    windows/maploadingwindow.h \
     windows/mapsavingwindow.h \
     windows/warningmessage.h
 

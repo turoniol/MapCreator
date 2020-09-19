@@ -9,16 +9,15 @@
 #include <QDialogButtonBox>
 #include <QIntValidator>
 
-#include "scene/scene.h"
-
 class MapCreatingWindow : public QDialog
 {
   Q_OBJECT
 public:
-  MapCreatingWindow(QWidget *parent, Scene *scene);
+  MapCreatingWindow(QWidget *parent);
+  int getX() const;
+  int getY() const;
 private:
   // variables
-  Scene *scene;
   QLabel *lx, *ly;
   QLineEdit *ex, *ey;
   QWidget *parent;
@@ -32,8 +31,6 @@ private:
   void addButtons();
   void setStyle();
   void connectSlots();
-private slots:
-  void acceptClicked();
 };
 
 #endif // MAPCREATINGWINDOW_H
