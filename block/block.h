@@ -15,7 +15,6 @@ public:
   void setType(const unsigned &value);
   BlockType getType() const;
   QPixmap getPixmap();
-  void setHighlight(BlockType type, int rot);
   int getRotation() const;
   BlockType getFutureType(BlockType val);
   void addNeighbour(Block &);

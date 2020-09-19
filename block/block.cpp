@@ -50,22 +50,6 @@ QPixmap Block::getPixmap()
   return pix;
 }
 
-void Block::setHighlight(BlockType type, int rot)
-{
-  QPixmap pix;
-  BlockType ftype = getFutureType(type);
-
-  if(ftype == GRASS)
-    pix.load(":/images/grassEdit.png");
-  else if(ftype == LEFT || ftype == RIGHT || ftype == UP || ftype == DOWN)
-    pix.load(":/images/roadEdit.png");
-  else if(ftype == UP_LEFT || ftype == UP_RIGHT || ftype == DOWN_LEFT || ftype == DOWN_RIGHT)
-    pix.load(":/images/road_centralEdit.png");
-  setRotation(rot);
-
-  setPixmap(pix);
-}
-
 int Block::getRotation() const
 {
   return typeMap[type];
@@ -104,7 +88,6 @@ void Block::setPix()
 
   setPixmap(pixmap);
 }
-
 
 Block::Block()
 {

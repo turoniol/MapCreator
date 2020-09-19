@@ -19,22 +19,24 @@ public:
   bool createMap(const int w, const int h, QString& name);
   void displayMap();
   void saveMap(const QString &name);
-  // QGraphicsScene interface
-  void setBlocke(BlockEditor *value, QWidget *parent);
   void createEmptyMap(const int x, const int y);
   bool existMap();
   ~Scene();
-protected:
+//protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-  virtual void keyPressEvent(QKeyEvent *event) override;
+//  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+//  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+//  virtual void keyPressEvent(QKeyEvent *event) override;
 private:
+  // variables
   Map *map;
-  Block *previousBlock;
-  BlockEditor *blocke;
+  BlockEditor *editBlock;
   QWidget *parent;
-  int width, height;
+  int _width, _height;
+  // functions
+  bool inScene(qreal x, qreal y);
+signals:
+  void saved();
 };
 
 #endif // SCENE_H

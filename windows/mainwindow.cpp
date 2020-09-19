@@ -45,9 +45,6 @@ MainWindow::MainWindow(QWidget *parent)
   else
     loadingWindow->show();
 
-  // TO DO
-  // rewrite BlockEditor
-  scene.setBlocke(&blockArea, ui->graphicsView);
   ui->graphicsView->setScene(&scene);
 
   connect(this, &MainWindow::readyToClearWarningWindow, this, &MainWindow::clearWarningWindowPointer);
@@ -66,6 +63,13 @@ MainWindow::MainWindow(QWidget *parent)
       QString path = _dir.mapsPath() + fileName + ".txt";
       scene.createMap(_width, _height, path);
   });
+  // on map saved
+  connect(&scene, &Scene::saved, [this](){
+      QString name = savingWindow->getText();
+      fileName = name;
+      savingWindow->setText(fileName);
+      loadingWindow->renew();
+  });
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -75,12 +79,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
   ui->graphicsView->setGeometry(0, 0, w, h);
   Q_UNUSED(event);
-}
-
-void MainWindow::clearWarningWindowPointer()
-{
-  delete warningWindow;
-  warningWindow = nullptr;
 }
 
 void MainWindow::saveMap()
@@ -98,15 +96,11 @@ void MainWindow::saveMap()
         });
       connect(warningWindow, &QMessageBox::accepted, [this, path]() {
           scene.saveMap(path);
-          loadingWindow->renew();
           emit readyToClearWarningWindow();
         });
     }
   else {
     scene.saveMap(path);
-    fileName = name;
-    savingWindow->setText(fileName);
-    loadingWindow->renew();
     emit readyToClearWarningWindow();
     }
 }
@@ -115,8 +109,16 @@ void MainWindow::on_actionQuit_triggered()
 {
   QApplication::quit();
 }
+
+void MainWindow::clearWarningWindowPointer()
+{
+  delete warningWindow;
+  warningWindow = nullptr;
+}
+
 MainWindow::~MainWindow()
 {
+  saveMap();
   delete ui;
 }
 

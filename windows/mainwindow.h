@@ -7,7 +7,6 @@
 #include <QScrollBar>
 
 #include "scene/scene.h"
-#include "block/blockeditor.h"
 #include "warningmessage.h"
 #include "mapcreatingwindow.h"
 #include "mapsavingwindow.h"
@@ -41,7 +40,6 @@ private:
   QGraphicsScene editBlockScene;
   Ui::MainWindow *ui;
   Scene scene;
-  BlockEditor blockArea;
 signals:
   void readyToClearWarningWindow();
 private slots:

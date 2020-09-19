@@ -17,13 +17,16 @@ MapLoadingWindow::MapLoadingWindow(QWidget *parent) : QDialog(parent)
   list->setStyleSheet("font-size: 20px");
   connect(delete_btn, &QPushButton::clicked, [this]() { emit deleted(); });
   connect(button, &QDialogButtonBox::accepted, this, &QDialog::accept);
+  // show warning message
   connect(this, &MapLoadingWindow::deleted, [this]() {
       msg->showMessage(QString("Do you really want to delete \n" + name() + "?"));
   });
+  // on item clicked
   connect(list, &QListWidget::itemClicked, [this]() {
       _current_text = list->currentItem()->text();
       emit choosen();
   });
+  // delete map
   connect(msg, &QMessageBox::accepted, [this]() {
       _dir.remove(name() + ".txt");
       renew();
