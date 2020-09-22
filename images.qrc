@@ -12,5 +12,6 @@
         <file>images/grassEdit.png</file>
         <file>images/road_centralEdit.png</file>
         <file>images/roadEdit.png</file>
+        <file>images/road_endEdit.png</file>
     </qresource>
 </RCC>

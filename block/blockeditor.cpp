@@ -21,9 +21,10 @@ void BlockEditor::rotate()
   setRotation(getRotationByType(_type));
 }
 
-void BlockEditor::setPix(BlockType itype)
+void BlockEditor::setPix(Block* const block)
 {
   QPixmap pix;
+  BlockType itype = block->getType();
   tempType = _type;
 
   BlockType t = _type != BlockType::GRASS ? (BlockType)((int)itype + (int)_type) : _type;
@@ -35,18 +36,22 @@ void BlockEditor::setPix(BlockType itype)
 
   if(tempType == BlockType::GRASS)
     pix.load(":/images/grassEdit.png");
-  else if(isLineRoad(tempType))
+  else if (isLineRoad(tempType))
     pix.load(":/images/roadEdit.png");
-  else if(isCornerRoad(tempType))
-    pix.load(":/images/road_centralEdit.png");
+  else if (isCornerRoad(tempType)) {
+      if (block->isEndCornerRoad(tempType))
+        pix.load(":/images/road_endEdit.png");
+      else
+        pix.load(":/images/road_centralEdit.png");
+    }
   setPixmap(pix);
   setRotation(getRotationByType(tempType));
 }
 
-void BlockEditor::setPosition(int x, int y, Block::BlockType t)
+void BlockEditor::setPosition(int x, int y, Block* const block)
 {
   if (QPointF(x, y) != pos()) {
-      setPix(t);
+      setPix(block);
       setPos(x, y);
     }
 }
@@ -64,18 +69,6 @@ Block::BlockType BlockEditor::getOpposite(Block::BlockType type)
   b.rotate();
   auto t = b.getType();
   return (isLineRoad(t)) ? t : BlockType::GRASS;
-}
-
-bool BlockEditor::isLineRoad(Block::BlockType type)
-{
-  return (type == BlockType::LEFT || type == BlockType::RIGHT ||
-          type == BlockType::DOWN || type == BlockType::UP);
-}
-
-bool BlockEditor::isCornerRoad(Block::BlockType type)
-{
-  return type == BlockType::UP_LEFT || type == BlockType::UP_RIGHT ||
-      type == BlockType::DOWN_LEFT || type == BlockType::DOWN_RIGHT;
 }
 
 void BlockEditor::retype()

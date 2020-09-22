@@ -81,7 +81,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
   y -= y % Block::getPixmapSize();
 
   if (existMap() && inScene(x, y) && QPointF(x, y) != editBlock->pos()) {
-      editBlock->setPosition(x, y, map->getBlockByCoordinate(x, y).getType());
+      editBlock->setPosition(x, y, &map->getBlockByCoordinate(x, y));
       if (event->buttons()  == Qt::LeftButton) {
           changeType(&map->getBlockByCoordinate(x, y));
       }
@@ -98,7 +98,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
       else if (event->button() == Qt::RightButton) {
           editBlock->rotate();
-          editBlock->setPix(block->getType());
+          editBlock->setPix(block);
         }
     }
 }
@@ -108,7 +108,7 @@ void Scene::keyPressEvent(QKeyEvent *event)
   if (editBlock != nullptr) {
       if (event->key() == Qt::Key_Space) {
           editBlock->retype();
-          editBlock->setPix(map->getBlockByCoordinate(editBlock->x(), editBlock->y()).getType());
+          editBlock->setPix(&map->getBlockByCoordinate(editBlock->x(), editBlock->y()));
         }
     }
 }
@@ -117,7 +117,8 @@ void Scene::changeType(Block *block)
 {
   block->setType(editBlock->getTempType());
   block->setPix();
-  editBlock->setPix(block->getType());
+  block->repixNeighbors();
+  editBlock->setPix(block);
 }
 
 bool Scene::inScene(qreal x, qreal y)

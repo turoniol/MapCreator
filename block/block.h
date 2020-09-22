@@ -17,9 +17,13 @@ public:
   BlockType getType() const;
   QPixmap getPixmap();
   void addNeighbour(Block &);
+  void repixNeighbors();
   static unsigned getPixmapSize();
   static int getRotationByType(BlockType type);
   static BlockType getTypeByRotation(int rot);
+  bool isEndCornerRoad(const BlockType t);
+  bool isLineRoad(const BlockType t);
+  bool isCornerRoad(const BlockType t);
 protected:
   QVector<Block*> neighbours;
   BlockType _type;

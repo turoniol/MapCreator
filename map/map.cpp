@@ -121,6 +121,7 @@ void Map::setBlocksNeighbours()
 
 void Map::displayMap()
 {
+  setBlocksNeighbours();
   for(Block &obj : map) {
       obj.setPix();
   }

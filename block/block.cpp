@@ -42,14 +42,15 @@ QPixmap Block::getPixmap()
   QPixmap pix;
   int SIZE = getPixmapSize();
   this->setTransformOriginPoint(SIZE/2, SIZE/2);
-  if(_type == BlockType::GRASS)
-    pix.load(":/images/grass.png");
-  else if(_type == BlockType::LEFT || _type == BlockType::RIGHT ||
-          _type == BlockType::UP || _type == BlockType::DOWN)
+
+  if (isLineRoad(_type))
     pix.load(":/images/road.png");
-  else if(_type == BlockType::UP_LEFT || _type == BlockType::UP_RIGHT ||
-          _type == BlockType::DOWN_LEFT || _type == BlockType::DOWN_RIGHT)
-    pix.load(":/images/road_central.png");
+  else if (isCornerRoad(_type)) {
+      if (isEndCornerRoad(_type))
+        pix.load(":/images/road_end.png");
+      else
+        pix.load(":/images/road_central.png");
+  }
   else
     pix.load(":/images/grass.png");
 
@@ -61,6 +62,14 @@ void Block::addNeighbour(Block &obj)
   neighbours.push_back(&obj);
 }
 
+void Block::repixNeighbors()
+{
+  for (const auto& obj : neighbours) {
+      if (obj != nullptr)
+        obj->setPix();
+  }
+}
+
 void Block::setType(const unsigned value)
 {
   _type = (BlockType)value;
@@ -69,6 +78,50 @@ void Block::setType(const unsigned value)
 void Block::setType(const Block::BlockType val)
 {
   _type = val;
+}
+bool Block::isEndCornerRoad(const Block::BlockType t)
+{
+  if (t == BlockType::DOWN_LEFT) { // down 2 left 1 up 8 right 4
+      auto right = neighbours[3];
+      auto up = neighbours[0];
+      if ((right != nullptr && right->getType() == BlockType::GRASS) ||
+          (up != nullptr && up->getType() == BlockType::GRASS))
+        return true;
+    }
+  else if (t == BlockType::DOWN_RIGHT) {
+      auto left = neighbours[1];
+      auto up = neighbours[0];
+      if ((left != nullptr && left->getType() == BlockType::GRASS) ||
+          (up != nullptr && up->getType() == BlockType::GRASS))
+        return true;
+    }
+  else if (t == BlockType::UP_RIGHT) {
+      auto left = neighbours[1];
+      auto down = neighbours[2];
+      if ((left != nullptr && left->getType() == BlockType::GRASS) ||
+          (down != nullptr && down->getType() == BlockType::GRASS))
+        return true;
+    }
+  else if (t == BlockType::UP_LEFT) {
+      auto right = neighbours[3];
+      auto down = neighbours[2];
+      if ((right != nullptr && right->getType() == BlockType::GRASS) ||
+          (down != nullptr && down->getType() == BlockType::GRASS))
+        return true;
+    }
+  return false;
+}
+
+bool Block::isLineRoad(const Block::BlockType type)
+{
+  return (type == BlockType::LEFT || type == BlockType::RIGHT ||
+          type == BlockType::DOWN || type == BlockType::UP);
+}
+
+bool Block::isCornerRoad(const Block::BlockType type)
+{
+  return type == BlockType::UP_LEFT || type == BlockType::UP_RIGHT ||
+      type == BlockType::DOWN_LEFT || type == BlockType::DOWN_RIGHT;
 }
 
 void Block::setPix()

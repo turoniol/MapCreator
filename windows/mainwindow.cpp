@@ -84,6 +84,9 @@ void MainWindow::saveMap()
 {
   warningWindow = new WarningMessage;
   QString name = savingWindow->getText();
+  if (name.isEmpty())
+    name = "UNSAVED";
+
   QString path = _dir.mapsPath() + name + ".txt";
   if (_dir.findFile(QString(name + ".txt")) &&
       (this->fileName != name))
@@ -99,9 +102,10 @@ void MainWindow::saveMap()
         });
     }
   else {
-    scene.saveMap(path);
-    emit readyToClearWarningWindow();
+      scene.saveMap(path);
+      emit readyToClearWarningWindow();
     }
+
 }
 
 void MainWindow::on_actionQuit_triggered()
