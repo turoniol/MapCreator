@@ -8,7 +8,6 @@ bool Map::loadMapFromFile(const QString &file_name)
       out >> width >> height; // reading of size
 
       int pixmap_size = Block::getPixmapSize();
-
       graphicWidth = pixmap_size*width;
       graphicHeight = pixmap_size*height;
       unsigned int type;
@@ -16,10 +15,8 @@ bool Map::loadMapFromFile(const QString &file_name)
       for(unsigned y = 0; y < height; ++y) { // adding parameters of block
           for(unsigned x = 0; x < width; ++x) {
               Block obj;
-
               out >> type;
               obj.setType(type);
-
               obj.setPos(x*pixmap_size, y*pixmap_size);
               map.push_back(obj);
           }
@@ -57,7 +54,7 @@ void Map::saveMap(const QString &file_name)
       QTextStream in(&f);
       in << width << " " << height << " ";
       for(auto obj : map)
-        in << obj.getType() << " ";
+        in << (int)obj.getType() << " ";
     }
 }
 

@@ -24,16 +24,15 @@ public:
   ~Scene();
 //protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-//  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-//  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-//  virtual void keyPressEvent(QKeyEvent *event) override;
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  virtual void keyPressEvent(QKeyEvent *event) override;
 private:
   // variables
   Map *map;
   BlockEditor *editBlock;
-  QWidget *parent;
   int _width, _height;
   // functions
+  void changeType(Block *block);
   bool inScene(qreal x, qreal y);
 signals:
   void saved();

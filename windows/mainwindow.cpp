@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
   viewZoom = new GraphicsViewZoom(ui->graphicsView);
   viewZoom->set_modifiers(Qt::ControlModifier);
 
-  ui->graphicsView->setMouseTracking(true);
   ui->graphicsView->setGeometry(0, 0, _width, _height);
 
   // checking map`s dir

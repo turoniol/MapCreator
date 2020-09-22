@@ -5,29 +5,24 @@
 class Block : public QGraphicsPixmapItem
 {
 public:
-  enum BlockType { GRASS, LEFT, DOWN, RIGHT = 4, UP = 8,
+  enum class BlockType { GRASS, LEFT, DOWN, RIGHT = 4, UP = 8,
                    DOWN_LEFT = DOWN + LEFT, DOWN_RIGHT = DOWN + RIGHT,
-                   UP_RIGHT = UP + RIGHT, UP_LEFT = UP + LEFT};
+                   UP_RIGHT = UP + RIGHT, UP_LEFT = UP + LEFT };
   Block();
   Block(const Block &obj);
   Block operator=(const Block &obj);
   void setPix();
-  void setType(const unsigned &value);
+  void setType(const unsigned value);
+  void setType(const BlockType val);
   BlockType getType() const;
   QPixmap getPixmap();
-  int getRotation() const;
-  BlockType getFutureType(BlockType val);
   void addNeighbour(Block &);
-  void fillTypeMap();
-  bool isChanged();
-  void setChange(bool value);
   static unsigned getPixmapSize();
+  static int getRotationByType(BlockType type);
+  static BlockType getTypeByRotation(int rot);
 protected:
-  QMap<BlockType, int> typeMap;
   QVector<Block*> neighbours;
-  BlockType type;
-  bool change;
-  int rotation;
+  BlockType _type;
   QPixmap pixmap;
 };
 #endif // BLOCK_H

@@ -13,12 +13,15 @@ public:
   BlockEditor();
   void retype();
   void rotate();
-  Block *getPreviousBlock() const;
   void setPreviousBlock(Block *value);
   void setPix(BlockType type);
   void setPosition(int x, int y, BlockType t);
+  BlockType getTempType() const;
 private:
-  Block *previousBlock;
+  BlockType getOpposite(BlockType type);
+  BlockType tempType;
+  bool isLineRoad(BlockType t);
+  bool isCornerRoad(BlockType t);
 };
 
 #endif // BLOCKEDITOR_H

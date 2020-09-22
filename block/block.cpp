@@ -1,24 +1,30 @@
 #include "block.h"
-void Block::fillTypeMap() {
-  typeMap[GRASS] = 0;
-  typeMap[LEFT] = 0;
-  typeMap[RIGHT] = 180;
-  typeMap[DOWN] = 270;
-  typeMap[UP] = 90;
-  typeMap[DOWN_LEFT] = 0;
-  typeMap[DOWN_RIGHT] = 270;
-  typeMap[UP_LEFT] = 90;
-  typeMap[UP_RIGHT] = 180;
+#include <QDebug>
+int Block::getRotationByType(BlockType type) {
+  if (type == BlockType::GRASS) return -360;
+  else if (type == BlockType::LEFT) return 0;
+  else if (type == BlockType::RIGHT) return 180;
+  else if (type == BlockType::DOWN) return 270;
+  else if (type == BlockType::UP) return 90;
+  else if (type == BlockType::DOWN_LEFT) return 360 + 0;
+  else if (type == BlockType::DOWN_RIGHT) return  360 + 270;
+  else if (type == BlockType::UP_LEFT) return 360 + 90;
+  else if (type == BlockType::UP_RIGHT) return 360 + 180;
+  else return -360;
 }
 
-bool Block::isChanged()
+Block::BlockType Block::getTypeByRotation(int rot)
 {
-  return change;
-}
-
-void Block::setChange(bool value)
-{
-  change = value;
+  if (rot == -360) return BlockType::GRASS;
+  else if (rot == 0) return BlockType::LEFT;
+  else if (rot == 180) return BlockType::RIGHT;
+  else if (rot == 270) return BlockType::DOWN;
+  else if (rot == 90) return BlockType::UP;
+  else if (rot == 360 + 0) return BlockType::DOWN_LEFT;
+  else if (rot == 360 + 270) return  BlockType::DOWN_RIGHT;
+  else if (rot == 360 + 90) return BlockType::UP_LEFT;
+  else if (rot == 360 + 180) return BlockType::UP_RIGHT;
+  else return BlockType::GRASS;
 }
 
 unsigned Block::getPixmapSize()
@@ -28,21 +34,21 @@ unsigned Block::getPixmapSize()
 
 Block::BlockType Block::getType() const
 {
-  return type;
+  return _type;
 }
 
 QPixmap Block::getPixmap()
 {
   QPixmap pix;
-  fillTypeMap();
   int SIZE = getPixmapSize();
   this->setTransformOriginPoint(SIZE/2, SIZE/2);
-
-  if(type == GRASS)
+  if(_type == BlockType::GRASS)
     pix.load(":/images/grass.png");
-  else if(type == LEFT || type == RIGHT || type == UP || type == DOWN)
+  else if(_type == BlockType::LEFT || _type == BlockType::RIGHT ||
+          _type == BlockType::UP || _type == BlockType::DOWN)
     pix.load(":/images/road.png");
-  else if(type == UP_LEFT || type == UP_RIGHT || type == DOWN_LEFT || type == DOWN_RIGHT)
+  else if(_type == BlockType::UP_LEFT || _type == BlockType::UP_RIGHT ||
+          _type == BlockType::DOWN_LEFT || _type == BlockType::DOWN_RIGHT)
     pix.load(":/images/road_central.png");
   else
     pix.load(":/images/grass.png");
@@ -50,61 +56,43 @@ QPixmap Block::getPixmap()
   return pix;
 }
 
-int Block::getRotation() const
-{
-  return typeMap[type];
-}
-
-Block::BlockType Block::getFutureType(Block::BlockType val)
-{
-  int t = (int)type;
-  bool vertical = ((val ==  DOWN) || (val == UP));
-  bool horizontal = ((val ==  RIGHT) || (val == LEFT));
-
-  if((type == LEFT && vertical) || (type == RIGHT && vertical) ||
-     (type == DOWN && horizontal) || (type == UP && horizontal))
-    t += (int)val;
-  else
-    t = (int)val;
-  return (BlockType)t;
-}
-
 void Block::addNeighbour(Block &obj)
 {
   neighbours.push_back(&obj);
 }
 
-void Block::setType(const unsigned &value)
+void Block::setType(const unsigned value)
 {
-  type = getFutureType((BlockType)value);
-  change = true;
+  _type = (BlockType)value;
+}
+
+void Block::setType(const Block::BlockType val)
+{
+  _type = val;
 }
 
 void Block::setPix()
 {
   pixmap = getPixmap();
-  rotation = typeMap[type];
-  setRotation(rotation);
-
+  setRotation(getRotationByType(_type));
   setPixmap(pixmap);
 }
 
 Block::Block()
 {
-  change = false;
-  type = GRASS;
+  _type = BlockType::GRASS;
 }
 
 Block::Block(const Block &obj) : QGraphicsPixmapItem()
 {
-  this->type = obj.type;
+  this->_type = obj._type;
   this->setPos(obj.pos());
 }
 
 Block Block::operator=(const Block &obj)
 {
   Block block;
-  block.type = obj.type;
+  block._type = obj._type;
   block.setPos(obj.pos());
   return block;
 }

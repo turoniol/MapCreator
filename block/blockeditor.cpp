@@ -3,65 +3,86 @@
 
 BlockEditor::BlockEditor()
 {
-  rotation = 0;
-  type = GRASS;
-  previousBlock = nullptr;
+  setTransformOriginPoint(getPixmapSize()/2, getPixmapSize()/2);
+  _type = BlockType::GRASS;
+  setRotation(getRotationByType(_type));
 }
 void BlockEditor::rotate()
 {
-  if(type >= LEFT && type <= UP) {
-      if(type == UP)
-        type = LEFT;
+  if(_type >= BlockType::LEFT && _type <= BlockType::UP) {
+      if(_type == BlockType::UP)
+        _type = BlockType::LEFT;
       else {
-          int t = (int)type;
+          int t = (int)_type;
           t <<= 1;
-          type = (BlockType)t;
+          _type = (BlockType)t;
         }
     }
-  rotation = typeMap[type];
-  setRotation(rotation);
+  setRotation(getRotationByType(_type));
 }
 
-Block *BlockEditor::getPreviousBlock() const
-{
-  return previousBlock;
-}
-
-void BlockEditor::setPreviousBlock(Block *value)
-{
-  previousBlock = value;
-}
-
-void BlockEditor::setPix(BlockType t)
+void BlockEditor::setPix(BlockType itype)
 {
   QPixmap pix;
-  BlockType ftype = (BlockType)((int)type + (int)t);
+  tempType = _type;
 
-  if(ftype == GRASS)
+  BlockType t = _type != BlockType::GRASS ? (BlockType)((int)itype + (int)_type) : _type;
+  if (isCornerRoad(t))
+    tempType = t;
+
+  if (!isLineRoad(tempType) && !isCornerRoad(tempType) && tempType != BlockType::GRASS)
+    tempType = BlockType::GRASS;
+
+  if(tempType == BlockType::GRASS)
     pix.load(":/images/grassEdit.png");
-  else if(ftype == LEFT || ftype == RIGHT || ftype == UP || ftype == DOWN)
+  else if(isLineRoad(tempType))
     pix.load(":/images/roadEdit.png");
-  else if(ftype == UP_LEFT || ftype == UP_RIGHT || ftype == DOWN_LEFT || ftype == DOWN_RIGHT)
+  else if(isCornerRoad(tempType))
     pix.load(":/images/road_centralEdit.png");
-  setRotation(ftype);
-
   setPixmap(pix);
+  setRotation(getRotationByType(tempType));
 }
 
 void BlockEditor::setPosition(int x, int y, Block::BlockType t)
 {
   if (QPointF(x, y) != pos()) {
-      qDebug() << x << y << t;
       setPix(t);
       setPos(x, y);
-  }
+    }
+}
+
+Block::BlockType BlockEditor::getTempType() const
+{
+  return tempType;
+}
+
+Block::BlockType BlockEditor::getOpposite(Block::BlockType type)
+{
+  BlockEditor b;
+  b.setType(type);
+  b.rotate();
+  b.rotate();
+  auto t = b.getType();
+  return (isLineRoad(t)) ? t : BlockType::GRASS;
+}
+
+bool BlockEditor::isLineRoad(Block::BlockType type)
+{
+  return (type == BlockType::LEFT || type == BlockType::RIGHT ||
+          type == BlockType::DOWN || type == BlockType::UP);
+}
+
+bool BlockEditor::isCornerRoad(Block::BlockType type)
+{
+  return type == BlockType::UP_LEFT || type == BlockType::UP_RIGHT ||
+      type == BlockType::DOWN_LEFT || type == BlockType::DOWN_RIGHT;
 }
 
 void BlockEditor::retype()
 {
-  if(type == GRASS)
-    setType(LEFT);
+  if(_type == BlockType::GRASS)
+    setType(BlockType::LEFT);
   else
-    setType(GRASS);
-  setRotation(typeMap[type]);
+    setType(BlockType::GRASS);
+  setRotation(getRotationByType(_type));
 }
